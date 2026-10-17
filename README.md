@@ -1,1426 +1,624 @@
-<!DOCTYPE html>
+<!doctype html>
 <html lang="es">
-  <head>
-    <meta charset="UTF-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <meta
-      name="description"
-      content="Mendoza Infinita: guía turística de Mendoza con contenido verificado, fuentes oficiales, mapas, curiosidades y planificador de viajes."
-    />
-    <meta
-      name="keywords"
-      content="Mendoza, viñedos, turismo, bodegas, gastronomía, Aconcagua, viajes, Mendoza Infinita"
-    />
-    <title>Mendoza Infinita</title>
-    <link rel="preconnect" href="https://fonts.googleapis.com" />
-    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
-    <link
-      href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:wght@500;600;700&family=Inter:wght@400;500;600;700;800&display=swap"
-      rel="stylesheet"
-    />
-    <style>
-      :root {
-        --malbec: #4d0d1b;
-        --wine-dark: #2c0e17;
-        --sand: #e9dfcf;
-        --cream: #f6f0e7;
-        --olive: #5a6a4c;
-        --stone: #6d655d;
-        --charcoal: #141313;
-        --ink: #1d1b1a;
-        --muted: rgba(255,255,255,0.75);
-        --shadow: 0 18px 35px rgba(20, 19, 19, 0.18);
-        --shadow-soft: 0 12px 28px rgba(32, 23, 19, 0.12);
-        --card-radius: 22px;
-      }
-
-      * {
-        box-sizing: border-box;
-      }
-
-      html {
-        scroll-behavior: smooth;
-      }
-
-      body {
-        margin: 0;
-        font-family: "Inter", sans-serif;
-        background: linear-gradient(180deg, #f8f2ea 0%, #f4efe8 100%);
-        color: var(--ink);
-        line-height: 1.6;
-      }
-
-      img {
-        max-width: 100%;
-        display: block;
-      }
-
-      a {
-        color: inherit;
-        text-decoration: none;
-      }
-
-      button,
-      input,
-      select {
-        font: inherit;
-      }
-
-      .container {
-        width: min(1200px, calc(100% - 32px));
-        margin: 0 auto;
-      }
-
-      .section {
-        padding: 90px 0;
-      }
-
-      .eyebrow {
-        margin: 0 0 14px;
-        text-transform: uppercase;
-        letter-spacing: 0.16em;
-        font-size: 0.72rem;
-        font-weight: 700;
-        color: var(--malbec);
-      }
-
-      h1, h2, h3, .display {
-        font-family: "Cormorant Garamond", serif;
-      }
-
-      h2 {
-        margin: 0 0 14px;
-        font-size: clamp(2.1rem, 5vw, 4rem);
-        line-height: 0.95;
-      }
-
-      p {
-        margin: 0 0 16px;
-      }
-
-      .topbar {
-        position: fixed;
-        top: 0;
-        left: 0;
-        right: 0;
-        z-index: 30;
-        transition: 0.35s ease;
-      }
-
-      .topbar.scrolled {
-        background: rgba(18, 16, 16, 0.78);
-        backdrop-filter: blur(14px);
-        box-shadow: 0 10px 25px rgba(0, 0, 0, 0.15);
-      }
-
-      .topbar-inner {
-        display: flex;
-        align-items: center;
-        justify-content: space-between;
-        min-height: 82px;
-        gap: 18px;
-      }
-
-      .brand {
-        display: flex;
-        align-items: center;
-        gap: 12px;
-        color: white;
-        font-weight: 700;
-        letter-spacing: 0.12em;
-        text-transform: uppercase;
-      }
-
-      .brand-mark {
-        width: 36px;
-        height: 36px;
-        border-radius: 50%;
-        background: linear-gradient(135deg, #4d0d1b, #d7b09a 55%, #9aa87f);
-        box-shadow: inset 0 0 0 2px rgba(255,255,255,0.45), 0 8px 18px rgba(77, 13, 27, 0.35);
-        display: inline-flex;
-        align-items: center;
-        justify-content: center;
-        overflow: hidden;
-      }
-
-      .brand-mark svg {
-        width: 24px;
-        height: 24px;
-        display: block;
-      }
-
-      .nav {
-        display: flex;
-        align-items: center;
-        gap: 18px;
-        white-space: nowrap;
-        overflow-x: auto;
-        scrollbar-width: none;
-      }
-
-      .nav::-webkit-scrollbar {
-        display: none;
-      }
-
-      .nav a {
-        color: rgba(255,255,255,0.86);
-        font-size: 0.74rem;
-        text-transform: uppercase;
-        letter-spacing: 0.08em;
-        transition: color 0.2s ease;
-      }
-
-      .nav a:hover,
-      .nav a:focus-visible {
-        color: white;
-      }
-
-      .hero {
-        position: relative;
-        min-height: 100vh;
-        display: grid;
-        place-items: center;
-        overflow: hidden;
-        background: linear-gradient(180deg, rgba(15, 10, 10, 0.38), rgba(15, 10, 10, 0.58)),
-          url("https://images.unsplash.com/photo-1501785888041-af3ef285b470?auto=format&fit=crop&w=1600&q=80") center/cover no-repeat;
-      }
-
-      .hero::after {
-        content: "";
-        position: absolute;
-        inset: 0;
-        background: linear-gradient(180deg, rgba(12, 10, 9, 0.18) 0%, rgba(12, 10, 9, 0.48) 100%);
-      }
-
-      .hero-inner {
-        position: relative;
-        z-index: 1;
-        width: min(1100px, calc(100% - 32px));
-        padding-top: 100px;
-      }
-
-      .hero-copy {
-        max-width: 700px;
-        color: white;
-      }
-
-      .display {
-        margin: 0;
-        font-size: clamp(4rem, 11vw, 9rem);
-        line-height: 0.8;
-        letter-spacing: -0.04em;
-      }
-
-      .tagline {
-        margin-top: 10px;
-        font-size: clamp(1.1rem, 2vw, 1.7rem);
-        font-weight: 500;
-        color: rgba(255,255,255,0.92);
-      }
-
-      .hero-actions {
-        display: flex;
-        flex-wrap: wrap;
-        gap: 14px;
-        margin-top: 30px;
-      }
-
-      .button {
-        display: inline-flex;
-        align-items: center;
-        justify-content: center;
-        min-height: 50px;
-        padding: 0 22px;
-        border-radius: 999px;
-        border: 1px solid rgba(255,255,255,0.38);
-        background: rgba(255,255,255,0.08);
-        color: white;
-        letter-spacing: 0.12em;
-        font-size: 0.72rem;
-        font-weight: 700;
-        text-transform: uppercase;
-        transition: transform 0.25s ease, background 0.25s ease;
-      }
-
-      .button:hover,
-      .button:focus-visible {
-        transform: translateY(-2px);
-        background: rgba(255,255,255,0.14);
-      }
-
-      .button.primary {
-        background: linear-gradient(135deg, var(--malbec), #791f37);
-        border-color: transparent;
-      }
-
-      .hero-stats {
-        display: flex;
-        flex-wrap: wrap;
-        gap: 20px;
-        margin-top: 36px;
-      }
-
-      .stat {
-        min-width: 160px;
-        padding: 14px 18px;
-        border-radius: 16px;
-        background: rgba(8, 6, 6, 0.28);
-        border: 1px solid rgba(255,255,255,0.14);
-      }
-
-      .stat strong {
-        display: block;
-        font-size: 1.4rem;
-      }
-
-      .stat span {
-        color: rgba(255,255,255,0.8);
-        font-size: 0.72rem;
-        letter-spacing: 0.08em;
-        text-transform: uppercase;
-      }
-
-      .lead {
-        font-size: clamp(1.1rem, 2vw, 1.35rem);
-      }
-
-      .notice {
-        display: flex;
-        align-items: center;
-        gap: 12px;
-        width: fit-content;
-        padding: 12px 16px;
-        border-radius: 999px;
-        background: rgba(255,255,255,0.08);
-        border: 1px solid rgba(255,255,255,0.16);
-        color: rgba(255,255,255,0.9);
-        font-size: 0.8rem;
-      }
-
-      .notice::before {
-        content: "i";
-        display: inline-grid;
-        place-items: center;
-        width: 22px;
-        height: 22px;
-        border-radius: 50%;
-        background: rgba(255,255,255,0.18);
-        font-weight: 700;
-      }
-
-      .section-shell {
-        background: linear-gradient(180deg, rgba(255,255,255,0.35), rgba(255,255,255,0.12));
-      }
-
-      .section-head {
-        display: flex;
-        flex-wrap: wrap;
-        align-items: end;
-        justify-content: space-between;
-        gap: 20px;
-        margin-bottom: 30px;
-      }
-
-      .section-head p {
-        max-width: 600px;
-        margin: 0;
-      }
-
-      .pill-row {
-        display: flex;
-        flex-wrap: wrap;
-        gap: 10px;
-        margin-top: 30px;
-      }
-
-      .pill {
-        display: inline-flex;
-        align-items: center;
-        padding: 8px 12px;
-        border-radius: 999px;
-        background: rgba(77, 13, 27, 0.06);
-        border: 1px solid rgba(77, 13, 27, 0.12);
-        font-size: 0.72rem;
-        letter-spacing: 0.08em;
-        text-transform: uppercase;
-        color: var(--malbec);
-        font-weight: 700;
-      }
-
-      .card-grid {
-        display: grid;
-        grid-template-columns: repeat(auto-fit, minmax(255px, 1fr));
-        gap: 22px;
-      }
-
-      .location-card {
-        display: flex;
-        flex-direction: column;
-        min-height: 100%;
-        padding: 0;
-        background: rgba(255,255,255,0.82);
-        border-radius: var(--card-radius);
-        overflow: hidden;
-        border: 1px solid rgba(24, 19, 17, 0.06);
-        box-shadow: var(--shadow-soft);
-        transition: transform 0.25s ease, box-shadow 0.25s ease;
-      }
-
-      .location-card:hover {
-        transform: translateY(-4px);
-        box-shadow: var(--shadow);
-      }
-
-      .location-card figure {
-        margin: 0;
-        position: relative;
-      }
-
-      .location-card img {
-        height: 220px;
-        width: 100%;
-        object-fit: cover;
-      }
-
-      .status {
-        position: absolute;
-        top: 14px;
-        right: 14px;
-        display: inline-flex;
-        align-items: center;
-        padding: 8px 10px;
-        background: rgba(15, 15, 15, 0.75);
-        color: white;
-        border-radius: 999px;
-        font-size: 0.68rem;
-        font-weight: 700;
-        letter-spacing: 0.08em;
-        text-transform: uppercase;
-      }
-
-      .status.verified {
-        background: rgba(32, 79, 57, 0.85);
-      }
-
-      .status.pending {
-        background: rgba(94, 85, 35, 0.78);
-      }
-
-      .card-content {
-        display: flex;
-        flex: 1;
-        flex-direction: column;
-        gap: 12px;
-        padding: 20px 18px 18px;
-      }
-
-      .card-header {
-        display: flex;
-        justify-content: space-between;
-        gap: 10px;
-        align-items: start;
-      }
-
-      .card-content h3 {
-        margin: 0;
-        font-size: clamp(1.8rem, 4vw, 2.3rem);
-        line-height: 0.9;
-      }
-
-      .chip {
-        display: inline-flex;
-        align-items: center;
-        padding: 6px 10px;
-        border-radius: 999px;
-        background: rgba(90, 106, 76, 0.12);
-        color: var(--olive);
-        font-size: 0.68rem;
-        letter-spacing: 0.08em;
-        text-transform: uppercase;
-        font-weight: 700;
-      }
-
-      .meta {
-        display: flex;
-        flex-wrap: wrap;
-        gap: 6px 10px;
-        font-size: 0.75rem;
-        color: var(--stone);
-      }
-
-      .meta strong {
-        color: var(--ink);
-      }
-
-      .source-line {
-        font-size: 0.72rem;
-        color: var(--stone);
-        line-height: 1.5;
-      }
-
-      .source-line a {
-        color: var(--malbec);
-        text-decoration: underline;
-      }
-
-      .card-actions {
-        display: flex;
-        flex-wrap: wrap;
-        gap: 10px;
-        margin-top: auto;
-      }
-
-      .mini-btn {
-        flex: 1 1 100px;
-        min-height: 42px;
-        padding: 0 12px;
-        border: 1px solid rgba(25, 20, 18, 0.12);
-        border-radius: 999px;
-        background: #fff;
-        font-size: 0.7rem;
-        text-transform: uppercase;
-        letter-spacing: 0.12em;
-        color: var(--ink);
-        font-weight: 700;
-        cursor: pointer;
-      }
-
-      .mini-btn.primary {
-        background: var(--malbec);
-        border-color: var(--malbec);
-        color: white;
-      }
-
-      .mini-btn.favorite.active {
-        background: #f6d7d8;
-        border-color: rgba(77, 13, 27, 0.33);
-        color: var(--malbec);
-      }
-
-      .budget-note {
-        margin-top: 8px;
-        color: var(--stone);
-        font-size: 0.72rem;
-      }
-
-      .search-console {
-        display: grid;
-        grid-template-columns: 2fr 1fr 1fr;
-        gap: 12px;
-        margin-bottom: 22px;
-      }
-
-      .search-box,
-      .field-select {
-        width: 100%;
-        min-height: 54px;
-        border-radius: 14px;
-        border: 1px solid rgba(25, 20, 18, 0.1);
-        background: rgba(255,255,255,0.8);
-        padding: 0 16px;
-        color: var(--ink);
-      }
-
-      .finder {
-        background: linear-gradient(180deg, #f8f0e8, #f5f3f1);
-        border: 1px solid rgba(18, 16, 16, 0.08);
-        border-radius: 24px;
-        box-shadow: var(--shadow-soft);
-        padding: 22px;
-      }
-
-      .feature-grid {
-        display: grid;
-        grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));
-        gap: 20px;
-      }
-
-      .feature {
-        padding: 26px 22px;
-        border-radius: var(--card-radius);
-        background: rgba(255,255,255,0.82);
-        border: 1px solid rgba(25,20,18,0.06);
-        box-shadow: var(--shadow-soft);
-      }
-
-      .feature h3 {
-        margin: 0 0 8px;
-        font-size: 2rem;
-      }
-
-      .curiosity-list {
-        display: grid;
-        grid-template-columns: repeat(auto-fit, minmax(270px, 1fr));
-        gap: 18px;
-      }
-
-      .curiosity {
-        padding: 22px 20px;
-        border-radius: 18px;
-        background: rgba(255,255,255,0.8);
-        border: 1px solid rgba(25,20,18,0.06);
-        box-shadow: var(--shadow-soft);
-      }
-
-      .curiosity strong {
-        display: block;
-        margin-bottom: 8px;
-        font-size: 1.05rem;
-      }
-
-      .facts-grid {
-        display: grid;
-        grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
-        gap: 18px;
-      }
-
-      .fact {
-        padding: 18px 16px;
-        border-radius: 16px;
-        background: rgba(77,13,27,0.08);
-        border: 1px solid rgba(77,13,27,0.14);
-      }
-
-      .fact strong {
-        display: block;
-        font-size: 1.5rem;
-        margin-bottom: 4px;
-      }
-
-      .map-panel {
-        display: grid;
-        grid-template-columns: 1.15fr 0.85fr;
-        gap: 18px;
-        align-items: stretch;
-      }
-
-      .map-box {
-        display: grid;
-        place-items: center;
-        min-height: 360px;
-        border-radius: 26px;
-        overflow: hidden;
-        background: linear-gradient(180deg, rgba(90,106,76,0.14), rgba(90,106,76,0.36)),
-          url("https://images.unsplash.com/photo-1500530855697-b586d89ba3ee?auto=format&fit=crop&w=1200&q=80") center/cover no-repeat;
-        border: 1px solid rgba(25,20,18,0.08);
-        position: relative;
-      }
-
-      .map-box::before {
-        content: "Mapa de referencia · Mendoza";
-        position: absolute;
-        left: 18px;
-        top: 18px;
-        padding: 8px 12px;
-        border-radius: 999px;
-        background: rgba(12, 10, 9, 0.65);
-        color: white;
-        font-size: 0.7rem;
-        letter-spacing: 0.08em;
-        text-transform: uppercase;
-      }
-
-      .map-list {
-        display: grid;
-        gap: 12px;
-      }
-
-      .map-item {
-        padding: 16px 18px;
-        background: rgba(255,255,255,0.78);
-        border: 1px solid rgba(25, 20, 18, 0.08);
-        border-radius: 18px;
-      }
-
-      .map-item strong {
-        display: block;
-        margin-bottom: 6px;
-      }
-
-      .hotel-search {
-        display: grid;
-        grid-template-columns: repeat(auto-fit, minmax(190px, 1fr));
-        gap: 12px;
-        margin-bottom: 24px;
-        padding: 20px;
-        border: 1px solid rgba(25,20,18,0.08);
-        border-radius: 20px;
-        background: rgba(255,255,255,0.78);
-        box-shadow: var(--shadow-soft);
-      }
-
-      .hotel-search label {
-        display: block;
-        margin-bottom: 6px;
-        color: var(--stone);
-        font-size: .72rem;
-        font-weight: 700;
-        letter-spacing: .08em;
-        text-transform: uppercase;
-      }
-
-      .hotel-search input,
-      .hotel-search select {
-        width: 100%;
-        min-height: 46px;
-        padding: 0 12px;
-        border: 1px solid rgba(25,20,18,.12);
-        border-radius: 12px;
-        background: #fff;
-        color: var(--ink);
-      }
-
-      .hotel-tier {
-        display: inline-block;
-        padding: 6px 10px;
-        border-radius: 999px;
-        background: rgba(77,13,27,.08);
-        color: var(--malbec);
-        font-size: .68rem;
-        font-weight: 800;
-        letter-spacing: .08em;
-        text-transform: uppercase;
-      }
-
-      .hotel-price-note {
-        padding: 14px 16px;
-        margin: 0 0 22px;
-        border-left: 3px solid var(--olive);
-        background: rgba(90,106,76,.08);
-        color: var(--stone);
-        font-size: .85rem;
-      }
-
-      .footer {
-        padding: 40px 0 80px;
-        background: #140d0d;
-        color: rgba(255,255,255,0.82);
-      }
-
-      .footer-inner {
-        display: flex;
-        flex-wrap: wrap;
-        justify-content: space-between;
-        gap: 22px;
-      }
-
-      .sr-only {
-        position: absolute;
-        width: 1px;
-        height: 1px;
-        padding: 0;
-        margin: -1px;
-        overflow: hidden;
-        clip: rect(0, 0, 0, 0);
-        white-space: nowrap;
-        border: 0;
-      }
-
-      @media (max-width: 900px) {
-        .search-console,
-        .map-panel {
-          grid-template-columns: 1fr;
-        }
-
-        .nav {
-          gap: 14px;
-          padding-bottom: 6px;
-        }
-      }
-
-      @media (max-width: 640px) {
-        .topbar-inner {
-          min-height: 72px;
-        }
-
-        .brand {
-          letter-spacing: 0.05em;
-          font-size: 0.8rem;
-        }
-
-        .hero {
-          min-height: 88vh;
-        }
-
-        .hero-actions {
-          flex-direction: column;
-          align-items: stretch;
-        }
-
-        .button {
-          width: 100%;
-        }
-
-      }
-    </style>
-  </head>
-  <body>
-    <header class="topbar" id="topbar">
-      <div class="container topbar-inner">
-        <a class="brand" href="#inicio" aria-label="Inicio">
-          <span class="brand-mark" aria-hidden="true"></span>
-          <span>Mendoza Infinita</span>
-        </a>
-        <nav class="nav" aria-label="Menú principal">
-          <a href="#inicio">Inicio</a>
-          <a href="#bodegas">Bodegas</a>
-          <a href="#gastronomia">Gastronomía</a>
-          <a href="#lugares">Lugares</a>
-          <a href="#naturaleza">Naturaleza</a>
-          <a href="#curiosidades">Curiosidades</a>
-          <a href="#historia">Historia</a>
-          <a href="#mapas">Mapas</a>
-        </nav>
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="theme-color" content="#25191b">
+  <meta name="description" content="Mendoza Infinita: una guía visual para inspirarte y descubrir Mendoza, Argentina.">
+  <title>Mendoza Infinita — Un mundo por descubrir</title>
+  <link rel="preconnect" href="https://images.unsplash.com">
+  <style>
+    :root {
+      --ink: #25191b;
+      --wine: #713744;
+      --wine-dark: #382029;
+      --cream: #f7f2ea;
+      --paper: #fffdf9;
+      --gold: #d8b780;
+      --muted: #746963;
+      --line: rgba(37, 25, 27, .14);
+      --serif: Georgia, "Times New Roman", serif;
+      --sans: "Aptos", "Segoe UI", sans-serif;
+    }
+
+    * { box-sizing: border-box; }
+    html { scroll-behavior: smooth; scroll-padding-top: 78px; }
+    body { margin: 0; color: var(--ink); background: var(--cream); font-family: var(--sans); }
+    body.locked { overflow: hidden; }
+    a { color: inherit; }
+    button, input, select { font: inherit; }
+    a:focus-visible, button:focus-visible, input:focus-visible, select:focus-visible {
+      outline: 3px solid #d8a852; outline-offset: 3px;
+    }
+
+    .skip {
+      position: fixed; z-index: 100; top: 10px; left: 10px; padding: 10px;
+      background: white; transform: translateY(-150%);
+    }
+    .skip:focus { transform: translateY(0); }
+
+    .header {
+      position: sticky; z-index: 20; top: 0; color: white;
+      background: rgba(37, 25, 27, .96); backdrop-filter: blur(12px);
+      border-bottom: 1px solid rgba(255,255,255,.12);
+    }
+    .nav {
+      max-width: 1400px; min-height: 76px; margin: auto; padding: 0 5vw;
+      display: flex; align-items: center; gap: 24px;
+    }
+    .brand { display: flex; align-items: center; gap: 10px; text-decoration: none; }
+    .brand svg { width: 43px; height: 43px; }
+    .brand b { display: block; font-size: 10px; letter-spacing: .19em; }
+    .brand small { display: block; margin-top: 4px; color: #dfcdb5; font: italic 10px var(--serif); }
+    .links { display: flex; align-items: center; gap: 18px; margin-left: auto; }
+    .links a { color: #f2e9df; font-size: 10px; text-decoration: none; letter-spacing: .06em; }
+    .links a:hover { color: var(--gold); }
+    .round, .menu {
+      position: relative; width: 42px; height: 42px; display: inline-grid; place-items: center;
+      border: 1px solid rgba(255,255,255,.34); border-radius: 50%; background: transparent;
+      color: white; cursor: pointer;
+    }
+    .menu { display: none; border-radius: 0; }
+    .count {
+      position: absolute; top: -4px; right: -5px; min-width: 18px; height: 18px;
+      padding: 0 4px; border-radius: 20px; background: var(--gold); color: var(--ink);
+      font-size: 10px; font-weight: bold; line-height: 18px;
+    }
+
+    .hero {
+      min-height: min(790px, calc(100svh - 76px)); position: relative; display: grid;
+      align-items: center; overflow: hidden; isolation: isolate; color: white;
+      background: #59434a;
+    }
+    .hero::after {
+      content: ""; position: absolute; z-index: -1; inset: 0;
+      background: linear-gradient(90deg, rgba(22,15,17,.78), rgba(22,15,17,.12)),
+        linear-gradient(0deg, rgba(22,15,17,.46), transparent 55%);
+    }
+    .hero img { position: absolute; z-index: -2; inset: 0; width: 100%; height: 100%;
+      object-fit: cover; object-position: 50% 52%; }
+    .hero-content { width: min(1350px, 100%); margin: auto; padding: 90px 8vw 115px; }
+    .eyebrow, .kicker { color: var(--wine); font-size: 10px; letter-spacing: .2em; text-transform: uppercase; }
+    .hero .eyebrow { color: #f2e4d0; }
+    .hero h1 {
+      margin: 27px 0 18px; font: 400 clamp(66px, 10vw, 140px)/.84 var(--serif);
+      letter-spacing: -.06em;
+    }
+    .hero h1 em { color: #e2c18c; }
+    .hero p { max-width: 460px; color: #f0e6dc; font-size: 16px; line-height: 1.8; }
+    .button {
+      display: inline-flex; min-height: 47px; justify-content: center; align-items: center;
+      gap: 9px; margin: 10px 8px 0 0; padding: 0 18px; border: 1px solid transparent;
+      text-decoration: none; text-transform: uppercase; letter-spacing: .09em;
+      font-size: 10px; font-weight: bold; cursor: pointer; transition: transform .2s;
+    }
+    .button:hover { transform: translateY(-2px); }
+    .gold { color: var(--ink); background: var(--gold); }
+    .ghost { color: white; border-color: rgba(255,255,255,.65); }
+    .hero-caption { position: absolute; right: 5vw; bottom: 22px; font-size: 9px; color: #eee1d6; }
+
+    .section { padding: 90px max(6vw, calc((100vw - 1220px)/2)); }
+    .section h2 { margin: 12px 0; font: 400 clamp(40px, 5.5vw, 68px)/.98 var(--serif); letter-spacing: -.045em; }
+    .section-head { max-width: 700px; margin-bottom: 34px; }
+    .section-head p { max-width: 620px; color: var(--muted); font-size: 14px; line-height: 1.8; }
+    .intro { display: grid; grid-template-columns: 1fr .8fr; gap: 8vw; align-items: end; }
+    .intro .section-head { margin: 0; }
+    .quote { border-left: 1px solid var(--gold); padding-left: 23px; font: 21px/1.5 var(--serif); }
+    .quote small { display: block; margin-top: 12px; color: var(--muted); font: 10px var(--sans); }
+
+    .ribbon {
+      padding: 26px max(6vw, calc((100vw - 1220px)/2)); display: flex;
+      justify-content: space-between; align-items: center; gap: 20px;
+      background: var(--wine-dark); color: white;
+    }
+    .ribbon p { margin: 0; font: 23px var(--serif); }
+    .ribbon a { color: var(--gold); font-size: 10px; letter-spacing: .1em; text-transform: uppercase; }
+
+    .gallery { background: #ece2d6; }
+    .mosaic { display: grid; grid-template-columns: 1.2fr .8fr 1fr; grid-template-rows: 230px 220px; gap: 10px; }
+    .tile { position: relative; min-width: 0; overflow: hidden; }
+    .tile:first-child { grid-row: span 2; }
+    .tile:last-child { grid-column: span 2; }
+    .tile img { width: 100%; height: 100%; object-fit: cover; transition: transform .5s; }
+    .tile:hover img { transform: scale(1.05); }
+    .tile::after { content: ""; position: absolute; inset: 40% 0 0; background: linear-gradient(transparent, rgba(20,14,15,.72)); }
+    .tile figcaption { position: absolute; z-index: 1; left: 16px; bottom: 15px; color: white; font: 20px var(--serif); }
+    .tile figcaption small { display: block; margin-top: 5px; font: 9px var(--sans); letter-spacing: .12em; text-transform: uppercase; }
+
+    .directory { background: var(--paper); }
+    .filters {
+      display: grid; grid-template-columns: 1.5fr .8fr .8fr auto; gap: 10px;
+      padding: 15px; margin-bottom: 16px; background: var(--cream); border: 1px solid var(--line);
+    }
+    .field label { display: block; margin-bottom: 7px; color: var(--muted);
+      font-size: 9px; font-weight: bold; letter-spacing: .1em; text-transform: uppercase; }
+    .field input, .field select {
+      width: 100%; min-height: 42px; padding: 0 10px; border: 1px solid var(--line);
+      border-radius: 0; background: white; color: var(--ink);
+    }
+    .filter-action { display: flex; align-items: end; }
+    .outline {
+      min-height: 42px; padding: 0 13px; border: 1px solid var(--wine);
+      background: transparent; color: var(--wine); cursor: pointer;
+      font-size: 10px; font-weight: bold; text-transform: uppercase;
+    }
+    .result { min-height: 24px; color: var(--muted); font-size: 12px; }
+    .cards { display: grid; grid-template-columns: repeat(3, minmax(0,1fr)); gap: 20px; }
+    .card { overflow: hidden; background: white; border: 1px solid var(--line); transition: transform .2s, box-shadow .2s; }
+    .card:hover { transform: translateY(-4px); box-shadow: 0 18px 45px #33231f1a; }
+    .card-image { position: relative; height: 210px; overflow: hidden; background: linear-gradient(140deg,#bc9a76,#41343b); }
+    .card-image img { width: 100%; height: 100%; object-fit: cover; transition: transform .45s; }
+    .card:hover .card-image img { transform: scale(1.04); }
+    .image-label {
+      position: absolute; left: 12px; bottom: 12px; padding: 6px 8px;
+      color: white; background: #21191ab3; font-size: 8px; letter-spacing: .1em; text-transform: uppercase;
+    }
+    .card-copy { padding: 18px; }
+    .meta { display: flex; justify-content: space-between; gap: 8px; color: var(--wine);
+      font-size: 9px; font-weight: bold; letter-spacing: .08em; text-transform: uppercase; }
+    .card h3 { margin: 12px 0 8px; font: 25px/1.1 var(--serif); }
+    .card p { min-height: 61px; margin: 0; color: var(--muted); font-size: 12px; line-height: 1.7; }
+    .card-actions { display: flex; align-items: center; justify-content: space-between; gap: 8px;
+      margin-top: 15px; padding-top: 12px; border-top: 1px solid var(--line); }
+    .map-link, .save { color: var(--wine); font-size: 10px; font-weight: bold; text-decoration: none; }
+    .save { padding: 7px 0 7px 7px; border: 0; background: transparent; cursor: pointer; }
+    .save[aria-pressed="true"] { color: #a12c49; }
+    .empty { grid-column: 1/-1; padding: 40px; border: 1px dashed var(--line); color: var(--muted); text-align: center; }
+
+    .wide-photo { position: relative; min-height: 430px; overflow: hidden; color: white; }
+    .wide-photo img { position: absolute; inset: 0; height: 100%; object-fit: cover; }
+    .wide-photo::after { content: ""; position: absolute; inset: 0; background: linear-gradient(90deg,#1c1415c7,transparent); }
+    .wide-copy { position: absolute; z-index: 1; top: 50%; left: 8vw; width: min(550px,80%); transform: translateY(-50%); }
+    .wide-copy .kicker { color: var(--gold); }
+    .wide-copy p { line-height: 1.7; }
+
+    .food { background: #e9dfd2; }
+    .food-grid { display: grid; grid-template-columns: repeat(4,1fr); gap: 1px; background: var(--line); border: 1px solid var(--line); }
+    .food-card { padding: 22px; background: #f7f2ea; }
+    .food-card small { color: var(--wine); font-size: 9px; letter-spacing: .12em; text-transform: uppercase; }
+    .food-card h3 { font: 23px var(--serif); }
+    .food-card p { color: var(--muted); font-size: 12px; line-height: 1.7; }
+
+    .map-section { color: white; background: var(--ink); }
+    .map-section .kicker { color: var(--gold); }
+    .map-section p { color: #d2c5b9; line-height: 1.7; }
+    .map-links { display: grid; }
+    .map-links a { padding: 14px 0; border-bottom: 1px solid #ffffff30; color: #efd8b4; text-decoration: none; font-size: 12px; }
+    .map-links a:hover { color: white; }
+    .footer { display: flex; justify-content: space-between; gap: 20px; padding: 25px 6vw; background: #191214; color: #ddd0c4; font-size: 10px; }
+    .footer p { margin: 0; }
+    .footer a { color: var(--gold); }
+
+    .backdrop { position: fixed; z-index: 39; inset: 0; visibility: hidden; opacity: 0; background: #120d0db3; transition: .2s; }
+    .backdrop.open { visibility: visible; opacity: 1; }
+    .drawer {
+      position: fixed; z-index: 40; inset: 0 0 0 auto; width: min(430px,100%); padding: 23px;
+      overflow-y: auto; background: var(--paper); transform: translateX(102%); transition: transform .25s;
+    }
+    .drawer.open { transform: translateX(0); }
+    .drawer-head { display: flex; justify-content: space-between; align-items: center; border-bottom: 1px solid var(--line); }
+    .drawer-head h2 { font: 32px var(--serif); }
+    .close { width: 40px; height: 40px; border: 1px solid var(--line); background: transparent; cursor: pointer; font-size: 21px; }
+    .note { color: var(--muted); font-size: 11px; line-height: 1.6; }
+    .favorite { display: flex; justify-content: space-between; gap: 10px; padding: 14px 0; border-bottom: 1px solid var(--line); }
+    .favorite strong { display: block; font: 19px var(--serif); }
+    .favorite small { display: block; margin-top: 5px; color: var(--muted); }
+    .favorite a { display: inline-block; margin-top: 8px; color: var(--wine); font-size: 10px; }
+    .favorite button { align-self: start; border: 0; background: transparent; color: var(--wine); cursor: pointer; }
+    .toast {
+      position: fixed; z-index: 60; left: 50%; bottom: 22px; padding: 12px 17px;
+      transform: translate(-50%,20px); opacity: 0; pointer-events: none;
+      color: white; background: var(--ink); font-size: 12px; transition: .2s;
+    }
+    .toast.show { transform: translate(-50%,0); opacity: 1; }
+
+    @media(max-width:1050px) {
+      .links { gap: 11px; }
+      .links a { font-size: 9px; }
+      .cards { grid-template-columns: repeat(2,minmax(0,1fr)); }
+    }
+    @media(max-width:780px) {
+      .nav { min-height: 66px; padding: 0 18px; }
+      .menu { display: inline-grid; }
+      .links { position: absolute; top: 66px; left: 0; right: 0; display: none; padding: 10px 20px 18px; background: #25191b; }
+      .links.open { display: grid; }
+      .links a { padding: 11px 0; border-bottom: 1px solid #ffffff1b; font-size: 12px; }
+      .hero { min-height: min(730px,calc(100svh - 66px)); }
+      .hero-content { padding: 80px 7vw 100px; }
+      .section { padding: 70px 7vw; }
+      .intro { grid-template-columns: 1fr; gap: 27px; }
+      .filters { grid-template-columns: 1fr 1fr; }
+      .field:first-child { grid-column: 1/-1; }
+      .food-grid { grid-template-columns: repeat(2,1fr); }
+    }
+    @media(max-width:540px) {
+      .brand svg { width: 37px; height: 37px; }
+      .brand b { font-size: 9px; }
+      .hero h1 { font-size: clamp(60px,17vw,85px); }
+      .section { padding: 60px 6vw; }
+      .section h2 { font-size: 44px; }
+      .mosaic { grid-template-columns: 1fr 1fr; grid-template-rows: 240px 165px 165px; gap: 8px; }
+      .tile:first-child { grid-column: span 2; grid-row: auto; }
+      .tile:last-child { grid-column: span 2; }
+      .filters { grid-template-columns: 1fr; }
+      .field:first-child { grid-column: auto; }
+      .cards, .food-grid { grid-template-columns: 1fr; }
+      .card p { min-height: 0; }
+      .ribbon, .footer { align-items: flex-start; flex-direction: column; }
+      .drawer { padding: 19px; }
+    }
+    @media(prefers-reduced-motion:reduce) {
+      *,*::before,*::after { scroll-behavior: auto !important; animation-duration: .01ms !important; transition-duration: .01ms !important; }
+    }
+  </style>
+</head>
+<body>
+  <a class="skip" href="#contenido">Saltar al contenido</a>
+
+  <header class="header">
+    <div class="nav">
+      <button class="menu" id="menuToggle" aria-label="Abrir menú" aria-expanded="false" aria-controls="navLinks">☰</button>
+      <a class="brand" href="#inicio" aria-label="Mendoza Infinita, ir al inicio">
+        <svg viewBox="0 0 64 64" aria-hidden="true">
+          <circle cx="32" cy="32" r="30" fill="none" stroke="#d8b780" stroke-width="1.5"/>
+          <path d="m12 42 16-25 7 11 6-8 12 22H12Z" fill="none" stroke="#fffaf2" stroke-width="2" stroke-linejoin="round"/>
+          <path d="m20 42 7-11 6 9 6-9 7 11M21 49l6-4 6 4 6-4 6 4" fill="none" stroke="#d8b780" stroke-width="2" stroke-linecap="round"/>
+        </svg>
+        <span><b>MENDOZA INFINITA</b><small>Un mundo por descubrir</small></span>
+      </a>
+      <nav class="links" id="navLinks" aria-label="Navegación principal">
+        <a href="#inicio">Inicio</a><a href="#galeria">Galería</a><a href="#explorar">Explorar</a>
+        <a href="#bodegas">Bodegas</a><a href="#gastronomia">Sabores</a><a href="#mapa">Mapa</a>
+      </nav>
+      <button class="round" id="openFavorites" aria-label="Abrir favoritos" title="Favoritos">
+        ♡<span class="count" id="favoriteCount">0</span>
+      </button>
+    </div>
+  </header>
+
+  <main id="contenido">
+    <section class="hero" id="inicio">
+      <img src="https://images.unsplash.com/photo-1470252649378-9c29740c9fa8?auto=format&fit=crop&w=2200&q=88"
+           alt="Paisaje de montaña bajo la luz dorada del atardecer" fetchpriority="high">
+      <div class="hero-content">
+        <span class="eyebrow">Argentina · Andes · Tierra del sol</span>
+        <h1>Mendoza<br><em>Infinita.</em></h1>
+        <p>Una provincia. Miles de historias. Un mundo por descubrir.<br>De la cordillera a los viñedos, cada camino es una invitación.</p>
+        <a class="button gold" href="#explorar">Empezar a explorar ↗</a>
+        <a class="button ghost" href="#galeria">Dejarse inspirar ↓</a>
       </div>
-    </header>
+      <span class="hero-caption">Fotografía ilustrativa · Unsplash</span>
+    </section>
 
-    <main>
-      <section class="hero" id="inicio">
-        <div class="hero-inner">
-          <div class="hero-copy">
-            <div class="notice">Contenido basado en fuentes verificadas y enlaces oficiales.</div>
-            <h1 class="display">MENDOZA INFINITA</h1>
-            <p class="tagline">«Una provincia. Miles de historias. Un mundo por descubrir».</p>
-            <div class="hero-actions">
-              <a class="button primary" href="#bodegas">Descubrí Mendoza</a>
-              <a class="button" href="#mapas">Explorá el mapa</a>
-            </div>
-            <div class="hero-stats" aria-label="Indicadores principales de experiencia">
-              <div class="stat">
-                <strong>6.961 m</strong>
-                <span>Aconcagua</span>
-              </div>
-              <div class="stat">
-                <strong>3</strong>
-                <span>Regiones clave</span>
-              </div>
-              <div class="stat">
-                <strong>100%</strong>
-                <span>Con fuentes</span>
-              </div>
-            </div>
-          </div>
+    <section class="section">
+      <div class="intro">
+        <div class="section-head"><span class="kicker">Mucho más que un destino</span>
+          <h2>Un paisaje que<br>se queda con vos.</h2>
+          <p>Montaña, agua, oasis, ciudad y el ritual de compartir una mesa. Elegí tu propio ritmo y empezá a imaginar el viaje.</p>
         </div>
-      </section>
-
-      <section class="section section-shell" id="bodegas">
-        <div class="container">
-          <div class="section-head">
-            <div>
-              <p class="eyebrow">Bodegas y vinos</p>
-              <h2>Donde cada copa cuenta una historia.</h2>
-            </div>
-            <p>La selección de bodegas se presenta con estados de verificación y fuentes directas. Cuando un dato no puede confirmarse, se etiqueta como pendiente de revisión.</p>
-          </div>
-          <div class="card-grid" id="bodega-grid"></div>
-        </div>
-      </section>
-
-      <section class="section" id="gastronomia">
-        <div class="container">
-          <div class="section-head">
-            <div>
-              <p class="eyebrow">Restaurantes y gastronomía</p>
-              <h2>Sabores que forman parte de la identidad mendocina.</h2>
-            </div>
-            <p>Las fichas de restaurantes y platos destacan solo información que puede respaldarse con menús, enlaces oficiales y fuentes vigentes.</p>
-          </div>
-          <div class="card-grid" id="restaurant-grid"></div>
-        </div>
-      </section>
-
-      <section class="section section-shell" id="lugares">
-        <div class="container">
-          <div class="section-head">
-            <div>
-              <p class="eyebrow">Lugares turísticos</p>
-              <h2>Descubrí Mendoza entre montañas, plazas y caminos.</h2>
-            </div>
-            <p>Los destinos se organizan por zona y municipio. Las observaciones de horario, acceso y temporada se muestran solo cuando están corroboradas con fuentes oficiales.</p>
-          </div>
-          <div class="card-grid" id="place-grid"></div>
-        </div>
-      </section>
-
-      <section class="section" id="naturaleza">
-        <div class="container">
-          <div class="section-head">
-            <div>
-              <p class="eyebrow">Naturaleza y aventura</p>
-              <h2>La provincia se vive también en movimiento.</h2>
-            </div>
-            <p>La experiencia de aventura exige requisitos de acceso y seguridad. Si no se confirma una actividad o una temporada, se marca como pendiente.</p>
-          </div>
-          <div class="feature-grid" id="activity-grid"></div>
-        </div>
-      </section>
-
-      <section class="section section-shell" id="curiosidades">
-        <div class="container">
-          <div class="section-head">
-            <div>
-              <p class="eyebrow">Datos curiosos</p>
-              <h2>El dato mendocino que pocos conocen.</h2>
-            </div>
-            <p>Las curiosidades priorizan datos con contexto, unidades y fuente verificada. Si una estadística cambia con el tiempo, se indica el año de referencia.</p>
-          </div>
-          <div class="curiosity-list" id="curiosity-grid"></div>
-        </div>
-      </section>
-
-      <section class="section" id="historia">
-        <div class="container">
-          <div class="section-head">
-            <div>
-              <p class="eyebrow">Historia y cultura</p>
-              <h2>Una provincia marcada por la tierra, el agua y la memoria.</h2>
-            </div>
-            <p>Los datos históricos se presentan con cautela y contexto. Cuando existe más de una interpretación, se lo explica sin convertir una versión discutida en una verdad absoluta.</p>
-          </div>
-          <div class="facts-grid" id="history-grid"></div>
-        </div>
-      </section>
-
-      <section class="section section-shell" id="mapas">
-        <div class="container">
-          <div class="section-head">
-            <div>
-              <p class="eyebrow">Mapas y ubicación</p>
-              <h2>Mendoza en un solo vistazo.</h2>
-            </div>
-            <p>Los enlaces de Google Maps se abren como alternativas directas. Si se requiere una clave de API, se recomienda guardarla en variables de entorno y nunca en archivos públicos.</p>
-          </div>
-          <div class="map-panel">
-            <div class="map-box" aria-label="Mapa de Mendoza de referencia"></div>
-            <div class="map-list" id="map-list"></div>
-          </div>
-        </div>
-      </section>
-
-      <section class="section" id="finder">
-        <div class="container">
-          <div class="section-head">
-            <div>
-              <p class="eyebrow">Buscador inteligente</p>
-            </div>
-            <p>El buscador combina nombres, regiones, categorías y palabras clave del contenido verificado. Si una consulta no tiene datos suficientes, sugiere consultar la fuente oficial.</p>
-          </div>
-          <div class="finder">
-            <div class="search-console">
-              <label class="sr-only" for="searchInput">Buscar lugares</label>
-              <input id="searchInput" class="search-box" type="search" placeholder="Buscar bodegas, restaurantes, lugares, actividades o curiosidades…" />
-              <select id="typeFilter" class="field-select" aria-label="Filtrar por tipo">
-                <option value="all">Todas las categorías</option>
-                <option value="bodega">Bodega</option>
-                <option value="restaurante">Restaurante</option>
-                <option value="lugar">Lugar</option>
-                <option value="naturaleza">Naturaleza</option>
-                <option value="curiosidad">Curiosidad</option>
-              </select>
-              <select id="regionFilter" class="field-select" aria-label="Filtrar por región">
-                <option value="all">Todas las regiones</option>
-                <option value="Valle de Uco">Valle de Uco</option>
-                <option value="Luján de Cuyo">Luján de Cuyo</option>
-                <option value="Ciudad de Mendoza">Ciudad de Mendoza</option>
-                <option value="Sur provincial">Sur provincial</option>
-                <option value="Alta Montaña">Alta Montaña</option>
-              </select>
-            </div>
-            <div class="card-grid" id="search-results"></div>
-          </div>
-        </div>
-      </section>
-
-    </main>
-
-    <footer class="footer">
-      <div class="container footer-inner">
-        <div>
-          <div class="brand" style="color: white; margin-bottom: 10px;">
-            <span class="brand-mark" aria-hidden="true"></span>
-            <span>Mendoza Infinita</span>
-          </div>
-          <p>Una experiencia turística basada en datos, fuentes oficiales y transparencia.</p>
-        </div>
-        <div>
-          <p>Fuentes de referencia: Ente Mendoza Turismo, Turismo Ciudad de Mendoza, Gobierno de Mendoza, Argentina.gob.ar.</p>
-          <p>Última verificación del contenido: 16/10/2026.</p>
+        <div class="quote">“La montaña marca el horizonte. El agua, la vida. Y el vino, una forma de contar esta tierra.”
+          <small>Una mirada editorial sobre Mendoza</small>
         </div>
       </div>
-    </footer>
+    </section>
 
-    <script>
-      const records = [
-        {
-          id: 'zuccardi',
-          name: 'Zuccardi Valle de Uco',
-          category: 'bodega',
-          region: 'Valle de Uco',
-          tags: ['viñedo', 'experiencia', 'paisaje'],
-          image: 'https://images.unsplash.com/photo-1516594915697-87eb3b1c14ea?auto=format&fit=crop&w=900&q=80',
-          description: 'Bodega con fuerte vínculo con la región de Valle de Uco y la vitivinicultura de altura. La propuesta de visita se presenta solo como referencia del establecimiento, con sitio web oficial como fachada de información.',
-          source: 'https://www.zuccardi.com/',
-          status: 'Verificado',
-          statusClass: 'verified'
-        },
-        {
-          id: 'catena',
-          name: 'Catena Zapata',
-          category: 'bodega',
-          region: 'Luján de Cuyo',
-          tags: ['historia', 'arquitectura', 'degustación'],
-          image: 'https://images.unsplash.com/photo-1506377247377-2a5b3b417ebb?auto=format&fit=crop&w=900&q=80',
-          description: 'Establecimiento asociado al recorrido vitivinícola de Luján de Cuyo, con visitas y catas documentadas en su plataforma oficial.',
-          source: 'https://www.catenawines.com/',
-          status: 'Verificado',
-          statusClass: 'verified'
-        },
-        {
-          id: 'salentein',
-          name: 'Salentein',
-          category: 'bodega',
-          region: 'Valle de Uco',
-          tags: ['paisaje', 'degustación', 'vistas'],
-          image: 'https://images.unsplash.com/photo-1473448912268-2022ce9509d8?auto=format&fit=crop&w=900&q=80',
-          description: 'Bodega ubicada en la zona de Valle de Uco con foco en la contemplación del viñedo y las actividades de degustación.',
-          source: 'https://www.salentein.com/',
-          status: 'Verificado',
-          statusClass: 'verified'
-        },
-        {
-          id: 'trapiche',
-          name: 'Trapiche',
-          category: 'bodega',
-          region: 'Luján de Cuyo',
-          tags: ['visita', 'museo', 'degustación'],
-          image: 'https://images.unsplash.com/photo-1528825871115-3581a5387919?auto=format&fit=crop&w=900&q=80',
-          description: 'Bodega reconocida por la oferta turística y la historia vitivinícola mendocina. La información se refiere a la marca y su sitio oficial.',
-          source: 'https://www.trapiche.com.ar/',
-          status: 'Verificado',
-          statusClass: 'verified'
-        },
-        {
-          id: 'luigi-bosca',
-          name: 'Luigi Bosca',
-          category: 'bodega',
-          region: 'Luján de Cuyo',
-          tags: ['arquitectura', 'degustación', 'familiar'],
-          image: 'https://images.unsplash.com/photo-1510812431401-41d2bd2722f3?auto=format&fit=crop&w=900&q=80',
-          description: 'Establecimiento de Luján de Cuyo con presencia comercial y turística documentada en sus canales oficiales.',
-          source: 'https://www.luigibosca.com/',
-          status: 'Verificado',
-          statusClass: 'verified'
-        },
-        {
-          id: 'casa-vigil',
-          name: 'Casa Vigil',
-          category: 'restaurante',
-          region: 'Ciudad de Mendoza',
-          tags: ['regional', 'vino', 'paisaje'],
-          image: 'https://images.unsplash.com/photo-1559339352-11d035aa65de?auto=format&fit=crop&w=900&q=80',
-          description: 'Restaurante con reconocimiento en la gastronomía mendocina y vínculos con la cultura del vino. Mantener acceso a menú y horarios directos en su sitio oficial.',
-          source: 'https://casavigil.com/',
-          status: 'Verificado',
-          statusClass: 'verified'
-        },
-        {
-          id: 'zonda',
-          name: 'Zonda Cocina de Paisaje',
-          category: 'restaurante',
-          region: 'Valle de Uco',
-          tags: ['vista', 'tierra', 'regional'],
-          image: 'https://images.unsplash.com/photo-1544025162-d76694265947?auto=format&fit=crop&w=900&q=80',
-          description: 'Establecimiento turístico vinculado a la experiencia de paisaje y gastronomía. La ficha se limita a información publicada en su presencia digital oficial.',
-          source: 'https://www.zondacocina.com/',
-          status: 'Verificado',
-          statusClass: 'verified'
-        },
-        {
-          id: 'fogon',
-          name: 'Fogón Cocina de Viñedo',
-          category: 'restaurante',
-          region: 'Luján de Cuyo',
-          tags: ['vino', 'bodega', 'restaurante'],
-          image: 'https://images.unsplash.com/photo-1547592180-85f173990554?auto=format&fit=crop&w=900&q=80',
-          description: 'Propuesta de gastronomía regional asociada a experiencia de viñedo, con menú y contacto publicados por el propio establecimiento.',
-          source: 'https://www.fogon.com.ar/',
-          status: 'Verificado',
-          statusClass: 'verified'
-        },
-        {
-          id: 'parque-san-martin',
-          name: 'Parque General San Martín',
-          category: 'lugar',
-          region: 'Ciudad de Mendoza',
-          tags: ['parque', 'familia', 'turismo'],
-          image: 'https://images.unsplash.com/photo-1506744038136-46273834b3fb?auto=format&fit=crop&w=900&q=80',
-          description: 'Espacio verde emblemático de la ciudad, con recorridos, senderos y miradores. Se recomienda verificar horarios y actividades actuales con la municipalidad y su portal turístico.',
-          source: 'https://turismo.ciudaddemendoza.gob.ar/',
-          status: 'Verificado',
-          statusClass: 'verified'
-        },
-        {
-          id: 'cerro-gloria',
-          name: 'Cerro de la Gloria',
-          category: 'lugar',
-          region: 'Ciudad de Mendoza',
-          tags: ['historia', 'mirador', 'cultura'],
-          image: 'https://images.unsplash.com/photo-1501785888041-af3ef285b470?auto=format&fit=crop&w=900&q=80',
-          description: 'Mirador y punto de referencia cultural de la ciudad con historia asociada al desarrollo urbano y a la conmemoración de la vida militar y deportiva.',
-          source: 'https://turismo.ciudaddemendoza.gob.ar/',
-          status: 'Verificado',
-          statusClass: 'verified'
-        },
-        {
-          id: 'aconcagua',
-          name: 'Parque Provincial Aconcagua',
-          category: 'naturaleza',
-          region: 'Alta Montaña',
-          tags: ['senderismo', 'montaña', 'naturaleza'],
-          image: 'https://images.unsplash.com/photo-1464822759023-fed622ff2c3b?auto=format&fit=crop&w=900&q=80',
-          description: 'Área protegida muy relevante para el trekking y la contemplación del paisaje andino. El acceso y las condiciones del recorrido deben verificarse con el organismo oficial correspondiente.',
-          source: 'https://www.argentina.gob.ar/parquesnacionales/aconcagua',
-          status: 'Verificado',
-          statusClass: 'verified'
-        },
-        {
-          id: 'puente-inca',
-          name: 'Puente del Inca',
-          category: 'lugar',
-          region: 'Alta Montaña',
-          tags: ['paisaje', 'ruta', 'naturaleza'],
-          image: 'https://images.unsplash.com/photo-1470770841072-f978cf4d019e?auto=format&fit=crop&w=900&q=80',
-          description: 'Sitio de interés turístico en el corredor andino con relevancia geológica y paisajística. Las condiciones de acceso y servicios se verifican con fuentes oficiales y locales.',
-          source: 'https://www.argentina.gob.ar/',
-          status: 'Pendiente',
-          statusClass: 'pending'
-        },
-        {
-          id: 'atuel',
-          name: 'Cañón del Atuel',
-          category: 'naturaleza',
-          region: 'Sur provincial',
-          tags: ['aventura', 'ruta', 'paisajes'],
-          image: 'https://images.unsplash.com/photo-1493246507139-91e8fad9978e?auto=format&fit=crop&w=900&q=80',
-          description: 'Destino de gran valor paisajístico y de aventura del sur provincial. La oferta de actividades debe mantenerse estrictamente vinculada a prestadores habilitados.',
-          source: 'https://www.mendoza.gov.ar/',
-          status: 'Pendiente',
-          statusClass: 'pending'
-        },
-        {
-          id: 'aconcagua-altura',
-          name: '¿Sabías que el Aconcagua supera los 6.000 metros?',
-          category: 'curiosidad',
-          region: 'Alta Montaña',
-          tags: ['altura', 'datos', 'naturaleza'],
-          image: 'https://images.unsplash.com/photo-1482192505345-5655af888cc4?auto=format&fit=crop&w=900&q=80',
-          description: 'El cerro Aconcagua es la cima más alta de Argentina y del hemisferio occidental. La cifra exacta debe acompañarse de la fuente del dato y de la referencia geográfica del presente.',
-          source: 'https://www.argentina.gob.ar/parquesnacionales/aconcagua',
-          status: 'Verificado',
-          statusClass: 'verified'
-        },
-        {
-          id: 'vendimia',
-          name: 'La Fiesta Nacional de la Vendimia',
-          category: 'curiosidad',
-          region: 'Ciudad de Mendoza',
-          tags: ['cultura', 'tradición', 'vino'],
-          image: 'https://images.unsplash.com/photo-1504674900247-0877df9cc836?auto=format&fit=crop&w=900&q=80',
-          description: 'La celebración vinculada a la vid y la cosecha es un eje clave de la tradición mendocina. Se debe referenciar la edición y la normativa institucional específica.',
-          source: 'https://www.mendoza.gov.ar/vendimia/',
-          status: 'Verificado',
-          statusClass: 'verified'
-        },
-        {
-          id: 'riego',
-          name: 'El riego y los oasis agrícolas',
-          category: 'curiosidad',
-          region: 'Mendoza',
-          tags: ['agua', 'agricultura', 'historia'],
-          image: 'https://images.unsplash.com/photo-1471193945509-9ad0617afabf?auto=format&fit=crop&w=900&q=80',
-          description: 'La organización del agua y del riego fue un componente central del desarrollo agrícola de la provincia. La explicación debe mantenerse en términos generales y respaldada por documentos institucionales.',
-          source: 'https://www.mendoza.gov.ar/',
-          status: 'Pendiente',
-          statusClass: 'pending'
-        },
-        {
-          id: 'fundacion',
-          name: 'Fundación de Mendoza',
-          category: 'historia',
-          region: 'Ciudad de Mendoza',
-          tags: ['historia', 'fundación', 'ciudad'],
-          image: 'https://images.unsplash.com/photo-1521295121783-8a321d551ad2?auto=format&fit=crop&w=900&q=80',
-          description: 'La ciudad de Mendoza se fundó en el marco del proceso de poblamiento colonial andino. Se recomienda cotejar las fechas y las interpretaciones con fuentes históricas primarias y académicas.',
-          source: 'https://www.mendoza.gov.ar/',
-          status: 'Pendiente',
-          statusClass: 'pending'
-        },
-        {
-          id: 'san-martin',
-          name: 'José de San Martín',
-          category: 'historia',
-          region: 'Mendoza',
-          tags: ['ejército', 'historia', 'cruce'],
-          image: 'https://images.unsplash.com/photo-1514565131-fce0801e5785?auto=format&fit=crop&w=900&q=80',
-          description: 'El cruce de los Andes es un episodio fundamental de la historia argentina y de la región mendocina. Las fechas y los detalles deben corroborarse con fuentes históricas oficiales y académicas.',
-          source: 'https://www.argentina.gob.ar/',
-          status: 'Pendiente',
-          statusClass: 'pending'
-        },
-        {
-          id: 'hospedaje',
-          name: 'Hotel Boutique en el centro',
-          category: 'hospedaje',
-          region: 'Ciudad de Mendoza',
-          tags: ['hotel', 'reserva', 'centro'],
-          image: 'https://images.unsplash.com/photo-1566073771259-6a8506099945?auto=format&fit=crop&w=900&q=80',
-          description: 'Alojamiento de la ciudad con disponibilidad y tarifas que requieren confirmación directa del establecimiento y la fecha de check-in.',
-          source: 'https://turismo.ciudaddemendoza.gob.ar/',
-          status: 'Pendiente',
-          statusClass: 'pending'
-        },
-        {
-          id: 'evento-vendimia',
-          name: 'Vendimia 2026',
-          category: 'evento',
-          region: 'Ciudad de Mendoza',
-          tags: ['agenda', 'fiesta', 'cultura'],
-          image: 'https://images.unsplash.com/photo-1495474472287-4d71bcdd2085?auto=format&fit=crop&w=900&q=80',
-          description: 'Evento institucional y cultural de gran relevancia para la provincia. La programación y la confirmación oficial deben consultarse en el sitio de la organización y la municipalidad.',
-          source: 'https://www.mendoza.gov.ar/vendimia/',
-          status: 'Pendiente',
-          statusClass: 'pending'
+    <div class="ribbon"><p>La próxima historia puede empezar en cualquier dirección.</p><a href="#explorar">Encontrá tu próximo lugar ↗</a></div>
+
+    <section class="section gallery" id="galeria">
+      <div class="section-head"><span class="kicker">Postales para soñar</span>
+        <h2>Mendoza, en imágenes.</h2>
+        <p>Una colección visual para entrar en clima. Las fotos son ilustrativas y no necesariamente muestran los destinos mencionados.</p>
+      </div>
+      <div class="mosaic">
+        <figure class="tile"><img loading="lazy" src="https://images.unsplash.com/photo-1500530855697-b586d89ba3ee?auto=format&fit=crop&w=1000&q=85" alt="Amplio paisaje natural de montaña"><figcaption>Aventura en la montaña<small>Paisajes de altura</small></figcaption></figure>
+        <figure class="tile"><img loading="lazy" src="https://images.unsplash.com/photo-1510812431401-41d2bd2722f3?auto=format&fit=crop&w=800&q=85" alt="Copas de vino servidas en una mesa"><figcaption>El ritual del vino<small>Una mesa, muchas historias</small></figcaption></figure>
+        <figure class="tile"><img loading="lazy" src="https://images.unsplash.com/photo-1414235077428-338989a2e8c0?auto=format&fit=crop&w=800&q=85" alt="Plato presentado en un restaurante"><figcaption>Sabores para compartir<small>Un viaje de los sentidos</small></figcaption></figure>
+        <figure class="tile"><img loading="lazy" src="https://images.unsplash.com/photo-1504279577054-acfeccf8fc52?auto=format&fit=crop&w=1300&q=85" alt="Hileras de viñas sobre un paisaje ondulado"><figcaption>Entre hileras de viñas<small>Cultura vitivinícola</small></figcaption></figure>
+      </div>
+    </section>
+
+    <section class="section directory" id="explorar">
+      <div class="section-head"><span class="kicker">Tu guía de viaje</span>
+        <h2>Lugares con<br>alma propia.</h2>
+        <p>Buscá por nombre, categoría o zona. Los enlaces de mapa realizan una búsqueda por nombre; verificá el resultado antes de viajar.</p>
+      </div>
+      <form class="filters" id="filters" role="search">
+        <div class="field"><label for="search">Buscar un lugar</label><input id="search" type="search" placeholder="Ej. Aconcagua, bodega, ciudad"></div>
+        <div class="field"><label for="category">Categoría</label>
+          <select id="category">
+            <option value="">Todas</option><option>Bodega</option><option>Gastronomía</option>
+            <option>Hotel</option><option>Naturaleza</option><option>Cultura</option><option>Actividad</option>
+          </select>
+        </div>
+        <div class="field"><label for="region">Zona</label><select id="region"><option value="">Todas las zonas</option></select></div>
+        <div class="filter-action"><button class="outline" id="clearFilters" type="button">Limpiar</button></div>
+      </form>
+      <p class="result" id="resultCount" aria-live="polite"></p>
+      <div class="cards" id="placeCards"></div>
+    </section>
+
+    <section class="wide-photo">
+      <img loading="lazy" src="https://images.unsplash.com/photo-1464822759023-fed622ff2c3b?auto=format&fit=crop&w=1900&q=88" alt="Cumbres imponentes de una cordillera">
+      <div class="wide-copy"><span class="kicker">Un horizonte que no se termina</span>
+        <h2>La cordillera<br>te está esperando.</h2>
+        <p>Respirá profundo. Mirá hacia arriba. La montaña siempre tiene algo más para mostrar.</p>
+        <a class="button gold" href="#mapa">Explorar destinos ↗</a>
+      </div>
+    </section>
+
+    <section class="section directory" id="bodegas">
+      <div class="section-head"><span class="kicker">Cultura vitivinícola</span>
+        <h2>De la viña<br>a la copa.</h2>
+        <p>Conocé algunos nombres y empezá a explorar. Confirmá visitas, horarios y experiencias directamente con cada establecimiento.</p>
+      </div>
+      <div class="cards" id="wineryCards"></div>
+    </section>
+
+    <section class="section food" id="gastronomia">
+      <div class="section-head"><span class="kicker">A la mesa</span>
+        <h2>Sabores de una<br>tierra generosa.</h2>
+        <p>Recetas argentinas, productos de estación y la cultura de compartir.</p>
+      </div>
+      <div class="food-grid">
+        <article class="food-card"><small>Para compartir</small><h3>Empanadas</h3><p>Clásico argentino de masa rellena, horneada o frita. Las recetas varían según cada tradición.</p></article>
+        <article class="food-card"><small>Mesa mendocina</small><h3>Tortitas</h3><p>Panificados cotidianos de panadería, presentes en desayunos y meriendas cuyanas.</p></article>
+        <article class="food-card"><small>Fuego y reunión</small><h3>Asado</h3><p>Una forma argentina de reunirse alrededor del fuego, compartir y disfrutar la sobremesa.</p></article>
+        <article class="food-card"><small>Estación y origen</small><h3>Productos locales</h3><p>Frutas, verduras, aceite de oliva y propuestas que expresan la identidad de la región.</p></article>
+      </div>
+    </section>
+
+    <section class="section" id="hoteles">
+      <div class="section-head"><span class="kicker">Quedarse un poco más</span>
+        <h2>Un refugio<br>entre recorridos.</h2>
+        <p>Referencias para iniciar la búsqueda. Tarifas, disponibilidad y servicios deben consultarse directamente con cada alojamiento.</p>
+      </div>
+      <div class="cards" id="hotelCards"></div>
+    </section>
+
+    <section class="section map-section" id="mapa">
+      <div class="section-head"><span class="kicker">Orientate y seguí</span>
+        <h2>Mendoza,<br>en el mapa.</h2>
+        <p>Los siguientes enlaces abren búsquedas en Google Maps. Comprobá el destino, la ruta, los accesos y las condiciones antes de salir.</p>
+      </div>
+      <div class="map-links">
+        <a href="https://www.google.com/maps/search/?api=1&query=Mendoza+Capital+Argentina" target="_blank" rel="noopener noreferrer">Explorar la ciudad de Mendoza ↗</a>
+        <a href="https://www.google.com/maps/search/?api=1&query=Valle+de+Uco+Mendoza+Argentina" target="_blank" rel="noopener noreferrer">Explorar Valle de Uco ↗</a>
+        <a href="https://www.google.com/maps/search/?api=1&query=Parque+Provincial+Aconcagua+Mendoza" target="_blank" rel="noopener noreferrer">Explorar alta montaña ↗</a>
+        <a href="https://www.google.com/maps/search/?api=1&query=Maipu+Mendoza+Argentina" target="_blank" rel="noopener noreferrer">Explorar Maipú ↗</a>
+      </div>
+      <p>Las imágenes son ilustrativas. Esta guía no consulta en tiempo real horarios, tarifas ni accesos.</p>
+    </section>
+  </main>
+
+  <footer class="footer"><p><strong>MENDOZA INFINITA</strong> · Una provincia. Miles de historias. Un mundo por descubrir.</p><p><a href="#inicio">Volver al inicio ↑</a></p></footer>
+
+  <div class="backdrop" id="backdrop"></div>
+  <aside class="drawer" id="drawer" role="dialog" aria-modal="true" aria-labelledby="drawerTitle" aria-hidden="true">
+    <div class="drawer-head"><h2 id="drawerTitle">Tus favoritos</h2><button class="close" id="closeDrawer" aria-label="Cerrar favoritos">×</button></div>
+    <p class="note">Se guardan en este navegador y no se sincronizan entre dispositivos.</p>
+    <div id="favoriteList"></div>
+    <p class="note" id="storageStatus"></p>
+    <button class="outline" id="clearFavorites">Quitar todos</button>
+  </aside>
+  <div class="toast" id="toast" role="status" aria-live="polite"></div>
+
+  <script>
+    "use strict";
+
+    const places = [
+      {id:"aconcagua",name:"Parque Provincial Aconcagua",category:"Naturaleza",region:"Las Heras · Alta montaña",kind:"Naturaleza",photo:"photo-1464822759023-fed622ff2c3b",alt:"Cumbres de una cordillera",description:"Paisajes de alta montaña en torno al cerro Aconcagua. Consultá permisos y condiciones oficiales.",query:"Parque Provincial Aconcagua Mendoza Argentina",tags:"montaña senderismo naturaleza"},
+      {id:"potrerillos",name:"Embalse de Potrerillos",category:"Naturaleza",region:"Luján de Cuyo",kind:"Naturaleza",photo:"photo-1500530855697-b586d89ba3ee",alt:"Paisaje de valle y montañas",description:"Un paisaje de agua y montaña al oeste de la ciudad. Revisá las condiciones locales antes de ir.",query:"Embalse Potrerillos Mendoza Argentina",tags:"montaña agua naturaleza"},
+      {id:"puente-inca",name:"Puente del Inca",category:"Naturaleza",region:"Las Heras · Alta montaña",kind:"Naturaleza",photo:"photo-1470252649378-9c29740c9fa8",alt:"Paisaje natural iluminado al atardecer",description:"Sitio natural emblemático de la ruta de alta montaña. Verificá estado de caminos y condiciones.",query:"Puente del Inca Mendoza Argentina",tags:"montaña naturaleza historia"},
+      {id:"parque-san-martin",name:"Parque General San Martín",category:"Naturaleza",region:"Ciudad de Mendoza",kind:"Naturaleza",photo:"photo-1441974231531-c6227db76b6e",alt:"Sendero rodeado de árboles",description:"Un amplio espacio verde urbano para recorrer y disfrutar del arbolado de la ciudad.",query:"Parque General San Martín Mendoza Argentina",tags:"ciudad parque paseo"},
+      {id:"cerro-gloria",name:"Cerro de la Gloria",category:"Cultura",region:"Ciudad de Mendoza",kind:"Historia y cultura",photo:"photo-1464822759023-fed622ff2c3b",alt:"Montañas bajo el cielo abierto",description:"Monumento y mirador en el Parque General San Martín, dedicado al Ejército de los Andes.",query:"Cerro de la Gloria Mendoza Argentina",tags:"historia cultura monumento"},
+      {id:"catena",name:"Bodega Catena Zapata",category:"Bodega",region:"Luján de Cuyo",kind:"Bodega",photo:"photo-1504279577054-acfeccf8fc52",alt:"Hileras de viñedos verdes",description:"Bodega mendocina conocida por su arquitectura. Confirmá visitas y experiencias directamente.",query:"Bodega Catena Zapata Mendoza Argentina",tags:"vino viñedos visita"},
+      {id:"trapiche",name:"Bodega Trapiche",category:"Bodega",region:"Maipú",kind:"Bodega",photo:"photo-1510812431401-41d2bd2722f3",alt:"Copas de vino sobre una mesa",description:"Referencia vitivinícola de Maipú. La oferta de visitas puede variar: consultá sus canales oficiales.",query:"Bodega Trapiche Maipu Mendoza Argentina",tags:"vino viñedos degustación"},
+      {id:"casa-vigil",name:"Casa Vigil",category:"Gastronomía",region:"Maipú",kind:"Gastronomía",photo:"photo-1414235077428-338989a2e8c0",alt:"Plato servido en una mesa de restaurante",description:"Propuesta gastronómica en Maipú. Consultá menú, horarios y reservas con el establecimiento.",query:"Casa Vigil Chachingo Mendoza Argentina",tags:"comida restaurante vino"},
+      {id:"hyatt",name:"Park Hyatt Mendoza",category:"Hotel",region:"Ciudad de Mendoza",kind:"Hotel",photo:"photo-1566073771259-6a8506099945",alt:"Hotel con piscina y jardines",description:"Hotel céntrico frente a Plaza Independencia. Tarifas y disponibilidad dependen de las fechas.",query:"Park Hyatt Mendoza Argentina",tags:"hotel alojamiento ciudad"},
+      {id:"diplomatic",name:"Diplomatic Hotel",category:"Hotel",region:"Ciudad de Mendoza",kind:"Hotel",photo:"photo-1542314831-068cd1dbfeeb",alt:"Hotel con iluminación cálida",description:"Alojamiento en la ciudad. Consultá directamente servicios, disponibilidad y tarifas actuales.",query:"Diplomatic Hotel Mendoza Argentina",tags:"hotel alojamiento ciudad"},
+      {id:"valle-uco",name:"Paisajes del Valle de Uco",category:"Actividad",region:"Valle de Uco",kind:"Actividad",photo:"photo-1504279577054-acfeccf8fc52",alt:"Viñedos extendidos en un valle",description:"Región de paisajes andinos y vitivinícolas. Planificá traslados y visitas con cada proveedor.",query:"Valle de Uco Mendoza Argentina",tags:"actividad naturaleza vino excursión"}
+    ];
+
+    const KEY = "mendoza-infinita-favoritos-v1";
+    const $ = id => document.getElementById(id);
+    let favorites = new Set();
+    let storageAvailable = true;
+    let toastTimer;
+
+    function escapeHtml(text) {
+      return String(text).replace(/[&<>"']/g, char =>
+        ({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;","'":"&#39;"}[char]));
+    }
+    function imageUrl(photo) {
+      return `https://images.unsplash.com/${encodeURIComponent(photo)}?auto=format&fit=crop&w=850&q=82`;
+    }
+    function mapUrl(place) {
+      return "https://www.google.com/maps/search/?api=1&query=" + encodeURIComponent(place.query);
+    }
+    function toast(message) {
+      $("toast").textContent = message;
+      $("toast").classList.add("show");
+      clearTimeout(toastTimer);
+      toastTimer = setTimeout(() => $("toast").classList.remove("show"), 3200);
+    }
+    function loadFavorites() {
+      try {
+        const raw = localStorage.getItem(KEY);
+        if (!raw) return new Set();
+        const value = JSON.parse(raw);
+        if (!Array.isArray(value) || value.some(id =>
+          typeof id !== "string" || !places.some(place => place.id === id))) {
+          throw new Error("Formato inválido de favoritos");
         }
-      ];
-
-      const mapItems = [
-        { name: 'Mendoza capital', url: 'https://maps.google.com/?q=Mendoza+Argentina', type: 'Ciudad' },
-        { name: 'Valle de Uco', url: 'https://maps.google.com/?q=Valle+de+Uco+Mendoza', type: 'Región' },
-        { name: 'Luján de Cuyo', url: 'https://maps.google.com/?q=Lujan+de+Cuyo+Mendoza', type: 'Región' },
-        { name: 'Aconcagua', url: 'https://maps.google.com/?q=Parque+Provincial+Aconcagua+Mendoza', type: 'Naturaleza' }
-      ];
-
-      const plannerDefaults = {
-        '2': { title: 'Ruta breve de alta intensidad', steps: ['Ciudad de Mendoza: Parque General San Martín y paseo por la plaza central.', 'Luján de Cuyo: visita a una bodega y degustación con información de la firma.', 'Vuelta al centro para recorridos culturales y gastronomía local.'] },
-        '3': { title: 'Travesía clásica triple', steps: ['Día 1: Ciudad de Mendoza y circuitos históricos.', 'Día 2: Valle de Uco o Luján de Cuyo con enoturismo.', 'Día 3: Alta Montaña o senderismo con paisaje andino.'] },
-        '4': { title: 'Mendoza profunda', steps: ['Dos días de vino y gastronomía.', 'Un día de naturaleza y montaña.', 'Un día de cultura histórica y museos.'] },
-        '5': { title: 'Exploración total de la provincia', steps: ['Centro urbano y patrimonio.', 'Valle de Uco y vistas del viñedo.', 'Aconcagua y excursiones de alta montaña.', 'Ruta del sur provincial y paisajes de aventura.', 'Gastronomía local y cierre cultural.'] }
-      };
-
-      function renderLocationCards(items, target, type) {
-        const container = document.getElementById(target);
-        container.innerHTML = items
-          .filter(item => type === 'all' || item.category === type)
-          .map(item => `
-            <article class="location-card">
-              <figure>
-                <img src="${item.image}" alt="${item.name}" loading="lazy" />
-                <span class="status ${item.statusClass}">${item.status}</span>
-              </figure>
-              <div class="card-content">
-                <div class="card-header">
-                  <h3>${item.name}</h3>
-                  <span class="chip">${item.category}</span>
-                </div>
-                <div class="meta">
-                  <span><strong>Región:</strong> ${item.region}</span>
-                  <span><strong>Fuente:</strong> ${item.source ? 'Oficial' : 'Pendiente'}</span>
-                </div>
-                <p>${item.description}</p>
-                <div class="source-line">Verificado: <a href="${item.source}" target="_blank" rel="noreferrer">${item.source}</a></div>
-                <div class="card-actions">
-                  <button class="mini-btn primary" type="button">Ver mapa</button>
-                  <button class="mini-btn favorite" type="button" data-id="${item.id}">Favorito</button>
-                </div>
-              </div>
-            </article>
-          `)
-          .join('');
+        return new Set(value);
+      } catch (error) {
+        storageAvailable = false;
+        toast("No se pudieron leer los favoritos guardados en este navegador.");
+        return new Set();
       }
-
-      function renderSearchResults(items) {
-        const container = document.getElementById('search-results');
-        if (!items.length) {
-          container.innerHTML = '<p style="margin: 0;">No se encontró información suficiente para esta consulta. Intente una búsqueda más específica o consulte la fuente oficial.</p>';
-          return;
-        }
-
-        container.innerHTML = items.map(item => `
-          <article class="location-card">
-            <figure>
-              <img src="${item.image}" alt="${item.name}" loading="lazy" />
-              <span class="status ${item.statusClass}">${item.status}</span>
-            </figure>
-            <div class="card-content">
-              <div class="card-header">
-                <h3>${item.name}</h3>
-                <span class="chip">${item.category}</span>
-              </div>
-              <div class="meta">
-                <span><strong>Región:</strong> ${item.region}</span>
-              </div>
-              <p>${item.description}</p>
-              <div class="source-line"><a href="${item.source}" target="_blank" rel="noreferrer">Consultar fuente</a></div>
-            </div>
-          </article>
-        `).join('');
+    }
+    function saveFavorites() {
+      try {
+        localStorage.setItem(KEY, JSON.stringify([...favorites]));
+        storageAvailable = true;
+      } catch (error) {
+        storageAvailable = false;
+        toast("No se pudieron guardar los favoritos. Revisá el almacenamiento del navegador.");
       }
-
-      function bindFavoriteButtons() {
-        document.querySelectorAll('.favorite').forEach(button => {
-          const id = button.dataset.id;
-          const saved = JSON.parse(localStorage.getItem('favorites') || '[]');
-          if (saved.includes(id)) {
-            button.classList.add('active');
-            button.textContent = 'Guardado';
-          }
-
-          button.addEventListener('click', () => {
-            const favorites = JSON.parse(localStorage.getItem('favorites') || '[]');
-            const index = favorites.indexOf(id);
-            if (index >= 0) {
-              favorites.splice(index, 1);
-              button.classList.remove('active');
-              button.textContent = 'Favorito';
-            } else {
-              favorites.push(id);
-              button.classList.add('active');
-              button.textContent = 'Guardado';
-            }
-            localStorage.setItem('favorites', JSON.stringify(favorites));
-          });
-        });
-      }
-
-      function initFilters() {
-        const search = document.getElementById('searchInput');
-        const typeFilter = document.getElementById('typeFilter');
-        const regionFilter = document.getElementById('regionFilter');
-
-        const applySearch = () => {
-          const query = search.value.toLowerCase().trim();
-          const typeValue = typeFilter.value;
-          const regionValue = regionFilter.value;
-
-          const filtered = records.filter(item => {
-            const matchesText = !query ||
-              item.name.toLowerCase().includes(query) ||
-              item.region.toLowerCase().includes(query) ||
-              item.tags.join(' ').toLowerCase().includes(query) ||
-              item.description.toLowerCase().includes(query);
-            const matchesType = typeValue === 'all' || item.category === typeValue;
-            const matchesRegion = regionValue === 'all' || item.region === regionValue;
-            return matchesText && matchesType && matchesRegion;
-          });
-
-          renderSearchResults(filtered);
-        };
-
-        search.addEventListener('input', applySearch);
-        typeFilter.addEventListener('change', applySearch);
-        regionFilter.addEventListener('change', applySearch);
-
-        renderSearchResults(records);
-      }
-
-      function initPlanner() {
-        const plannerBtn = document.getElementById('plannerBtn');
-        const plannerResult = document.getElementById('plannerResult');
-
-        function generatePlan() {
-          const days = document.getElementById('daysInput').value;
-          const region = document.getElementById('regionInput').value;
-          const trip = document.getElementById('tripInput').value;
-          const budget = document.getElementById('budgetInput').value;
-
-          const baseSet = plannerDefaults[days] || plannerDefaults['3'];
-          const focusMap = {
-            vino: ['Una experiencia de bodegas en Luján de Cuyo o Valle de Uco.', 'Degustación y recorrido por viñedos.', 'Cena con gastronomía local y vista.'],
-            naturaleza: ['Trekking y paisaje andino.', 'Ruta panorámica hacia montaña y miradores.', 'Visitas a puntos de naturaleza protegida.'],
-            historia: ['Recorrido por la ciudad y su zona fundacional.', 'Museos y patrimonio urbano.', 'Memoria del cruce de los Andes.'],
-            gastronomia: ['Restaurantes y bodegas con gastronomía.', 'Platos regionales y productos locales.', 'Paseo por bares y establecimientos con menú oficiales.']
-          };
-
-          const detailText = focusMap[trip] || focusMap.naturaleza;
-          const budgetText = budget === 'alto' ? 'Plan premium y de mayor experiencia de alojamiento, degustación y visitas guiadas.' : budget === 'bajo' ? 'Plan equilibrado con recorridos clave y menor costo por tramo.' : 'Plan con equilibrio entre experiencias, logística y gastronomía.';
-
-          plannerResult.innerHTML = `
-            <div class="result-item">
-              <strong>${baseSet.title}</strong>
-              <span>${budgetText}</span>
-            </div>
-            <div class="result-item">
-              <strong>Región focal</strong>
-              <span>${region}</span>
-            </div>
-            ${baseSet.steps.map((step, index) => `
-              <div class="result-item">
-                <strong>Día ${index + 1}</strong>
-                <span>${step}</span>
-              </div>
-            `).join('')}
-            <div class="result-item">
-              <strong>Enfoque recomendando</strong>
-              <span>${detailText.join(' ')}</span>
-            </div>
-          `;
-        }
-
-        plannerBtn.addEventListener('click', generatePlan);
-        generatePlan();
-      }
-
-      function initMapList() {
-        const mapList = document.getElementById('map-list');
-        mapList.innerHTML = mapItems.map(item => `
-          <div class="map-item">
-            <strong>${item.name}</strong>
-            <div class="source-line"><a href="${item.url}" target="_blank" rel="noreferrer">${item.type} · abrir en Google Maps</a></div>
+    }
+    function card(place) {
+      const saved = favorites.has(place.id);
+      return `<article class="card">
+        <div class="card-image">
+          <img loading="lazy" src="${imageUrl(place.photo)}" alt="${escapeHtml(place.alt)}">
+          <span class="image-label">Imagen ilustrativa</span>
+        </div>
+        <div class="card-copy">
+          <div class="meta"><span>${escapeHtml(place.kind)}</span><span>${escapeHtml(place.region)}</span></div>
+          <h3>${escapeHtml(place.name)}</h3>
+          <p>${escapeHtml(place.description)}</p>
+          <div class="card-actions">
+            <a class="map-link" href="${mapUrl(place)}" target="_blank" rel="noopener noreferrer">⌖ Buscar en Maps ↗</a>
+            <button class="save" type="button" data-save="${escapeHtml(place.id)}" aria-pressed="${saved}">
+              ${saved ? "♥ Guardado" : "♡ Guardar"}
+            </button>
           </div>
-        `).join('');
+        </div>
+      </article>`;
+    }
+    function renderCards(element, list) {
+      element.innerHTML = list.length ? list.map(card).join("") :
+        '<div class="empty">No encontramos resultados. Probá otra búsqueda o limpiá los filtros.</div>';
+      element.querySelectorAll("img").forEach(img => img.addEventListener("error", () => {
+        img.alt = "Imagen no disponible";
+        img.remove();
+      }, {once:true}));
+    }
+    function filteredPlaces() {
+      const term = $("search").value.trim().toLocaleLowerCase("es");
+      const category = $("category").value;
+      const region = $("region").value;
+      return places.filter(place => {
+        const searchable = `${place.name} ${place.category} ${place.region} ${place.description} ${place.tags}`.toLocaleLowerCase("es");
+        return (!term || searchable.includes(term)) &&
+          (!category || category === place.category) &&
+          (!region || region === place.region);
+      });
+    }
+    function renderFavorites() {
+      const list = places.filter(place => favorites.has(place.id));
+      $("favoriteCount").textContent = String(favorites.size);
+      $("favoriteList").innerHTML = list.length ? list.map(place => `
+        <article class="favorite">
+          <div><strong>${escapeHtml(place.name)}</strong>
+          <small>${escapeHtml(place.kind)} · ${escapeHtml(place.region)}</small>
+          <a href="${mapUrl(place)}" target="_blank" rel="noopener noreferrer">Buscar en Maps ↗</a></div>
+          <button type="button" data-remove="${escapeHtml(place.id)}" aria-label="Quitar ${escapeHtml(place.name)}">Quitar</button>
+        </article>`).join("") : '<p class="note">Todavía no guardaste lugares. Explorá y armá tu lista.</p>';
+      $("storageStatus").textContent = storageAvailable ? "Favoritos guardados en este navegador." : "Almacenamiento no disponible.";
+      $("clearFavorites").disabled = list.length === 0;
+    }
+    function renderAll() {
+      renderCards($("placeCards"), filteredPlaces());
+      $("resultCount").textContent = `${filteredPlaces().length} lugares encontrados`;
+      renderCards($("wineryCards"), places.filter(place => place.category === "Bodega"));
+      renderCards($("hotelCards"), places.filter(place => place.category === "Hotel"));
+      renderFavorites();
+    }
+    function toggleFavorite(id) {
+      if (!places.some(place => place.id === id)) return;
+      if (favorites.has(id)) {
+        favorites.delete(id);
+        toast("Lugar quitado de favoritos.");
+      } else {
+        favorites.add(id);
+        toast("Lugar guardado en favoritos.");
       }
+      saveFavorites();
+      renderAll();
+    }
+    function openDrawer() {
+      $("drawer").classList.add("open");
+      $("backdrop").classList.add("open");
+      $("drawer").setAttribute("aria-hidden", "false");
+      document.body.classList.add("locked");
+      $("closeDrawer").focus();
+    }
+    function closeDrawer() {
+      $("drawer").classList.remove("open");
+      $("backdrop").classList.remove("open");
+      $("drawer").setAttribute("aria-hidden", "true");
+      document.body.classList.remove("locked");
+      $("openFavorites").focus();
+    }
 
-      function renderDynamicSections() {
-        const bodegas = records.filter(item => item.category === 'bodega');
-        const restaurantes = records.filter(item => item.category === 'restaurante');
-        const lugares = records.filter(item => item.category === 'lugar');
-        const actividades = records.filter(item => item.category === 'naturaleza');
-        const curiosidades = records.filter(item => item.category === 'curiosidad');
-        const historia = records.filter(item => item.category === 'historia');
-
-        renderLocationCards(bodegas, 'bodega-grid', 'all');
-        renderLocationCards(restaurantes, 'restaurant-grid', 'all');
-        renderLocationCards(lugares, 'place-grid', 'all');
-        renderLocationCards(actividades, 'activity-grid', 'all');
-
-        document.getElementById('curiosity-grid').innerHTML = curiosidades.map(item => `
-          <article class="curiosity">
-            <span class="chip" style="margin-bottom: 12px;">${item.region}</span>
-            <strong>${item.name}</strong>
-            <p>${item.description}</p>
-            <div class="source-line"><a href="${item.source}" target="_blank" rel="noreferrer">Consultar fuente</a></div>
-          </article>
-        `).join('');
-
-        document.getElementById('history-grid').innerHTML = historia.map(item => `
-          <div class="fact">
-            <strong>${item.name}</strong>
-            <span>${item.description}</span>
-          </div>
-        `).join('');
-
-        bindFavoriteButtons();
-      }
-
-      window.addEventListener('scroll', () => {
-        const topbar = document.getElementById('topbar');
-        topbar.classList.toggle('scrolled', window.scrollY > 24);
+    [...new Set(places.map(place => place.region))]
+      .sort((a,b) => a.localeCompare(b, "es"))
+      .forEach(region => {
+        const option = document.createElement("option");
+        option.value = region;
+        option.textContent = region;
+        $("region").append(option);
       });
 
-      renderDynamicSections();
-      initMapList();
-      initFilters();
-      initPlanner();
-    </script>
-  </body>
+    favorites = loadFavorites();
+    renderAll();
+
+    $("filters").addEventListener("submit", event => event.preventDefault());
+    $("search").addEventListener("input", () => {
+      renderCards($("placeCards"), filteredPlaces());
+      $("resultCount").textContent = `${filteredPlaces().length} lugares encontrados`;
+    });
+    $("category").addEventListener("change", () => {
+      renderCards($("placeCards"), filteredPlaces());
+      $("resultCount").textContent = `${filteredPlaces().length} lugares encontrados`;
+    });
+    $("region").addEventListener("change", () => {
+      renderCards($("placeCards"), filteredPlaces());
+      $("resultCount").textContent = `${filteredPlaces().length} lugares encontrados`;
+    });
+    $("clearFilters").addEventListener("click", () => {
+      $("search").value = "";
+      $("category").value = "";
+      $("region").value = "";
+      renderAll();
+      $("search").focus();
+    });
+    document.addEventListener("click", event => {
+      const save = event.target.closest("[data-save]");
+      const remove = event.target.closest("[data-remove]");
+      if (save) toggleFavorite(save.dataset.save);
+      if (remove) toggleFavorite(remove.dataset.remove);
+    });
+    $("openFavorites").addEventListener("click", openDrawer);
+    $("closeDrawer").addEventListener("click", closeDrawer);
+    $("backdrop").addEventListener("click", closeDrawer);
+    document.addEventListener("keydown", event => {
+      if (event.key === "Escape" && $("drawer").classList.contains("open")) closeDrawer();
+    });
+    $("clearFavorites").addEventListener("click", () => {
+      if (favorites.size && confirm("¿Quitar todos los lugares guardados?")) {
+        favorites.clear();
+        saveFavorites();
+        renderAll();
+        toast("Se quitaron todos los favoritos.");
+      }
+    });
+    $("menuToggle").addEventListener("click", () => {
+      const nav = $("navLinks");
+      const open = nav.classList.toggle("open");
+      $("menuToggle").setAttribute("aria-expanded", String(open));
+      $("menuToggle").setAttribute("aria-label", open ? "Cerrar menú" : "Abrir menú");
+      $("menuToggle").textContent = open ? "×" : "☰";
+    });
+    $("navLinks").addEventListener("click", event => {
+      if (event.target.closest("a")) {
+        $("navLinks").classList.remove("open");
+        $("menuToggle").setAttribute("aria-expanded", "false");
+        $("menuToggle").setAttribute("aria-label", "Abrir menú");
+        $("menuToggle").textContent = "☰";
+      }
+    });
+  </script>
+</body>
 </html>
